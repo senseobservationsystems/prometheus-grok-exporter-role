@@ -11,7 +11,7 @@
 - name: unzip binary
   unarchive:
     src: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_grok_exporter_filename }}.zip"
-    dest: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_grok_exporter_filename }}"
+    dest: "{{ prometheus_exporters_common_dist_dir }}"
     remote_src: yes
 
 - name: update group and owner for files
