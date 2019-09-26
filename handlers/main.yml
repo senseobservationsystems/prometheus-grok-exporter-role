@@ -1,0 +1,12 @@
+---
+
+- name: service reenable
+  command: systemctl reenable prometheus-grok-exporter.service
+
+- name: reinit grok exporter
+  command: initctl reload-configuration
+
+- name: restart grok exporter
+  service:
+    name: prometheus-grok-exporter
+    state: restarted

@@ -1,0 +1,73 @@
+---
+
+- name: download prometheus grok exporter binary
+  get_url:
+    url: "{{ url }}"
+    dest: "{{ prometheus_exporters_common_dist_dir }}"
+  register: prometheus_grok_exporter_updated
+  notify:
+    - restart grok exporter
+
+- name: unzip
+
+- name: update group and owner for files
+  file:
+    path: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_grok_exporter_filename }}"
+    owner: "{{ prometheus_exporters_common_user}}"
+    group: "{{ prometheus_exporters_common_group }}"
+    mode: 0755
+  when: prometheus_grok_exporter_updated | changed
+
+- name: create symlink to the current release
+  file:
+    src: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_grok_exporter_filename }}"
+    path: "{{ prometheus_exporters_common_root_dir }}/grok_exporter_current"
+    state: link
+
+- name: create systemd service unit
+  template:
+    src: etc/systemd/system/prometheus-grok-exporter.service.j2
+    dest: /etc/systemd/system/prometheus-grok-exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_service_mgr == 'systemd'
+  notify:
+    - service reenable
+    - restart grok exporter
+
+- name: Looking which version of upstart is install
+  command: initctl version
+  when: ansible_service_mgr == 'upstart'
+  register: upstart_version
+
+- name: create init service unit
+  template:
+    src: etc/init/prometheus-grok-exporter.conf.j2
+    dest: /etc/init/prometheus-grok-exporter.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_service_mgr == 'upstart'
+  notify:
+    - reinit grok exporter
+    - restart grok exporter
+
+- name: create sysvinit service unit
+  template:
+    src: etc/init.d/prometheus-grok-exporter.j2
+    dest: /etc/init.d/prometheus-grok-exporter
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_service_mgr == 'sysvinit'
+  notify:
+    - restart grok exporter
+
+- meta: flush_handlers
+
+- name: ensure prometheus grok exporter service is enabled and started
+  service:
+    name: prometheus-grok-exporter
+    state: started
+    enabled: yes
