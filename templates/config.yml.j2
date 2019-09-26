@@ -1,0 +1,21 @@
+global:
+    config_version: 2
+input:
+    type: file
+    path: {{ prometheus_grok_exporter_input_file_path }}
+    readall: false
+    
+grok:
+    patterns_dir: ./logstash-patterns-core/patterns
+metrics:
+{% for metric in prometheus_grok_exporter_metrics %}
+    - type: {{ metric.type }}
+      name: {{ metric.name }}
+      match: '{{ %{DATE} %{TIME} %{USER:user} %{NUMBER} }}'
+      labels:
+      {% for label in metric.label %}
+          {{ label.key }}: {{ label.value }}
+      {% endfor %}
+{% endfor %}
+server:
+    port: {{ prometheus_grok_exporter_port }}
