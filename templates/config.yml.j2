@@ -6,7 +6,7 @@ input:
     readall: false
     
 grok:
-    patterns_dir: ./logstash-patterns-core/patterns
+    patterns_dir: ./patterns
 metrics:
 {% for metric in prometheus_grok_exporter_metrics %}
     - type: {{ metric.type }}
