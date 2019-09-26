@@ -11,7 +11,7 @@ metrics:
 {% for metric in prometheus_grok_exporter_metrics %}
     - type: {{ metric.type }}
       name: {{ metric.name }}
-      match: '{{ %{DATE} %{TIME} %{USER:user} %{NUMBER} }}'
+      match: {{ metric.match }}
       labels:
       {% for label in metric.label %}
           {{ label.key }}: {{ label.value }}
