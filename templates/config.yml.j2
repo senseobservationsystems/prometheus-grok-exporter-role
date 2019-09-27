@@ -13,6 +13,10 @@ metrics:
       name: {{ metric.name }}
       help: {{ metric.help }}
       match: {{ metric.match }}
+      {% if metric.value %}value: {{ metric.value }}{% endif %}
+      {% if metric.cumulative %}cumulative: {{ metric.cumulative }}{% endif %}
+      {% if metric.buckets %}buckets: {{ metric.buckets }}{% endif %}
+      {% if metric.quantiles %}quantiles: {{ metric.quantiles }}{% endif %}
       labels:
 {% for label in metric.label %}
           {{ label.key }}: {{ label.value }}
