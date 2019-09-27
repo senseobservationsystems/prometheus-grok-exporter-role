@@ -6,7 +6,7 @@ input:
     readall: false
     
 grok:
-    patterns_dir: ./patterns
+    patterns_dir: "{{ prometheus_exporters_common_root_dir }}/grok_exporter_current/patterns"
 metrics:
 {% for metric in prometheus_grok_exporter_metrics %}
     - type: {{ metric.type }}
