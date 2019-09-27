@@ -13,10 +13,18 @@ metrics:
       name: {{ metric.name }}
       help: {{ metric.help }}
       match: {{ metric.match }}
-      {% if 'value' in metric %}value: {{ metric.value }}{% endif %}
-      {% if 'cumulative' in metric %}cumulative: {{ metric.cumulative }}{% endif %}
-      {% if 'buckets' in metric %}buckets: {{ metric.buckets }}{% endif %}
-      {% if 'quantiles' in metric %}quantiles: {{ metric.quantiles }}{% endif %}
+{% if 'value' in metric %}
+      value: {{ metric.value }}
+{% endif %}
+{% if 'cumulative' in metric %}
+      cumulative: {{ metric.cumulative }}
+{% endif %}
+{% if 'buckets' in metric %}
+      buckets: {{ metric.buckets }}
+{% endif %}
+{% if 'quantiles' in metric %}
+      quantiles: {{ metric.quantiles }}
+{% endif %}
       labels:
 {% for label in metric.label %}
           {{ label.key }}: {{ label.value }}
