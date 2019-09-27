@@ -7,5 +7,6 @@ prometheus_grok_exporter_filename: "{{ prometheus_grok_exporter_release_name }}-
 url: "https://github.com/fstab/grok_exporter/releases/download/v{{ prometheus_grok_exporter_version }}/{{ prometheus_grok_exporter_filename }}.zip"
 
 prometheus_grok_exporter_config_flags:
-  'log.level': 'info'
-  'config': 'config.yml'
+  'config': "{{ prometheus_exporters_common_root_dir }}/grok_exporter_current/config.yml"
+
+prometheus_grok_exporter_port: 9144
